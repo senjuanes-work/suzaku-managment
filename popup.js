@@ -80,9 +80,9 @@ function fillTable() {
             outs.sort((a, b) => { a - b });
             
             if (presicionModeGlob) {
-                hoursPause = round2((new Date().getTime() - outs[outs.length-1])/1000/60/60, 3);
+                hoursPause = round2((new Date().getTime() - outs[0])/1000/60/60, 3);
             } else {
-                hoursPause = toHumanReadable((new Date().getTime() - outs[outs.length-1])/1000/60/60);
+                hoursPause = toHumanReadable((new Date().getTime() - outs[0])/1000/60/60);
             }
 
             elPause.setAttribute('title', hoursPause);
