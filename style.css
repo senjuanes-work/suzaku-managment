@@ -1,0 +1,39 @@
+body {
+  background-color: #92afd4;
+}
+
+table, td, th {
+  background-color: #d2d9e0;
+  border: 1px solid #92afd4;
+  color: #202833;
+}
+
+table {
+  width: 150px;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+td {
+  padding: 5px;
+}
+
+.value {
+  text-align: right;
+}
+
+#pause {
+  display: none;
+  margin-bottom: 6px;
+  padding: 2px 6px 3px 6px;
+  background: #d2d9e0;
+  border-width: 0px;
+  border-style: solid;
+  border-radius: 10px;
+  color: #586b85;
+}
+
+#outRow {
+  display: none;
+}
