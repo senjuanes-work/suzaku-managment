@@ -38,19 +38,24 @@ function load() {
         xhr.send(formData);
         
         xhr.onreadystatechange = function () {
-            if (this.readyState != 4) return;
-        
-            if (this.status == 200) {
-                responseData = JSON.parse(this.responseText);
-
-                fillTable();
-
-                window.setInterval(function () {
+            try {
+                if (this.readyState != 4) return;
+                
+                if (this.status == 200) {
+                    responseData = JSON.parse(this.responseText);
+                
                     fillTable();
-                }, 1000);
-            } else {
+                
+                    window.setInterval(function () {
+                        fillTable();
+                    }, 1000);
+                } else {
+                    elPause.innerHTML = 'Error al conectar';
+                    fillTable();
+                }
+            } catch (error) {
                 elPause.innerHTML = 'Error al conectar';
-                fillTable();
+                    fillTable();
             }
         };
     });
