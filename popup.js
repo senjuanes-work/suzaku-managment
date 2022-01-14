@@ -105,7 +105,7 @@ function fillTable() {
 
     workedHours = msCount / 1000 / 60 / 60;
 
-    if (hoursWorkToday === 7.5 || ins.length > 1) {
+    if (hoursWorkToday === 7 || ins.length > 1) {
         elOutRow.style.display = 'table-row';
     }
     msLeft = (hoursWorkToday - workedHours)*1000*60*60;
