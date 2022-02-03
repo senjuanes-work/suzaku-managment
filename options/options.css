@@ -1,0 +1,26 @@
+body {
+    background-color: #92afd4;
+}
+
+.container {
+    padding: 15px 10px;
+    background-color: #d2d9e0;
+    border: 1px solid #92afd4;
+    color: #202833;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.field {
+    margin-top: 8px;
+    padding-left: 20px;
+}
+
+input[type=time], input[type=number] {
+    padding: 5px 8px;
+    border-color: #92afd4;
+    border-style: solid;
+    border-radius: 25px;
+}

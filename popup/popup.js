@@ -11,22 +11,35 @@ let now = new Date();
 
 let hoursWorkToday = now.getDay() === 5 || now.getMonth() === 6 || now.getMonth() === 7 ? 7 : 8.5;
 
-let presicionModeGlob = false;
+let configuration = {
+    precisionMode: false,
+    minInOrdinaryEnable: false,
+    minInSpecialEnable: false,
+    minInOrdinary: null,
+    minInSpecial: null,
+    minBreakOrdinaryEnable: false,
+    minBreakSpecialEnable: false,
+    minBreakOrdinary: null,
+    minBreakSpecial: null,
+};
 
 let responseData;
 
 load();
 
-elTable.addEventListener("click", async () => {
-    presicionModeGlob = !presicionModeGlob;
-    chrome.storage.sync.set({ presicionMode: presicionModeGlob });
-
-    fillTable();
-});
-
 function load() {
-    chrome.storage.sync.get("presicionMode", ({ presicionMode }) => {
-        presicionModeGlob = presicionMode;
+    chrome.storage.sync.get([
+        "precisionMode",
+        "minInOrdinaryEnable",
+        "minInSpecialEnable",
+        "minInOrdinary",
+        "minInSpecial",
+        "minBreakOrdinaryEnable",
+        "minBreakSpecialEnable",
+        "minBreakOrdinary",
+        "minBreakSpecial"
+    ], (configurationStore) => {
+        configuration = configurationStore;
         
         var formData = new FormData();
         formData.append('StartDate',new Date(new Date().setHours(0, 0, 0, 0)).toISOString());
@@ -84,7 +97,7 @@ function fillTable() {
         if (outs.length > 0) {
             outs.sort((a, b) => { a - b });
             
-            if (presicionModeGlob) {
+            if (configuration.precisionMode) {
                 hoursPause = round2((new Date().getTime() - outs[0])/1000/60/60, 3);
             } else {
                 hoursPause = toHumanReadable((new Date().getTime() - outs[0])/1000/60/60);
@@ -105,12 +118,18 @@ function fillTable() {
 
     workedHours = msCount / 1000 / 60 / 60;
 
-    if (hoursWorkToday === 7 || ins.length > 1) {
+    if (
+        hoursWorkToday === 7 || 
+        ins.length > 1 || 
+        (configuration.minBreakOrdinaryEnable && Number(configuration.minBreakOrdinary))
+    ) {
         elOutRow.style.display = 'table-row';
-    }
+    } 
+
+
     msLeft = (hoursWorkToday - workedHours)*1000*60*60;
 
-    if (presicionModeGlob) {
+    if (configuration.precisionMode) {
         elWorkedHours.innerHTML = round2(workedHours, 3);
         elHoursToWork.innerHTML = round2(hoursWorkToday - workedHours, 3);
         elPercentaje.innerHTML = round2((workedHours/hoursWorkToday)*100, 3); 

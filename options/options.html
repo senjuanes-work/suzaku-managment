@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="options.css">
+  </head>
+  <body>
+    <div class="container">
+      <!-- minInOrdinary -->
+      <div>
+        <label><input type="checkbox" id="minInOrdinaryCheck">Hora entrada mínima (días normales):</label>
+        <div class="field">
+          <input id="minInOrdinaryInput" type="time">
+        </div>
+      </div>
+      <!-- minInSpecial -->
+      <div>
+        <label><input type="checkbox" id="minInSpecialCheck">Hora entrada mínima (días especiales):</label>
+        <div class="field">
+          <input id="minInSpecialInput" type="time">
+        </div>
+      </div>
+      <!-- minBreakOrdinary -->
+      <div>
+        <label><input type="checkbox" id="minBreakOrdinaryCheck">Minutos descanso mínimo (días normales):</label>
+        <div class="field">
+          <input id="minBreakOrdinaryInput" type="number" min="0" max="300" step="1">
+        </div>
+      </div>
+      <!-- minBreakSpecial -->
+      <div>
+        <label><input type="checkbox" id="minBreakSpecialCheck">Minutos descanso mínimo (días especiales):</label>
+        <div class="field">
+          <input id="minBreakSpecialInput" type="number" min="0" max="300" step="1">
+        </div>
+      </div>
+      <!-- precisionMode -->
+      <div>
+        <label><input type="checkbox" id="precisionModeCheck">Modo precisión</label>
+      </div>
+    </div>
+    <script src="options.js"></script>
+  </body>
+</html>
