@@ -18,6 +18,13 @@ body {
     padding-left: 20px;
 }
 
+.label-checkbox {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    align-content: center;
+}
+
 input[type=time], input[type=number] {
     padding: 5px 8px;
     border-color: #92afd4;
