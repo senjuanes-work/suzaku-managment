@@ -6,6 +6,7 @@ let elOutRow = document.getElementById("outRow");
 let elOutTime = document.getElementById("outTime");
 let elPercentaje = document.getElementById("percentaje");
 
+let haveError = false;
 
 let now = new Date();
 
@@ -64,19 +65,18 @@ function load() {
                 
                 if (this.status == 200) {
                     responseData = JSON.parse(this.responseText);
-                
                     fillTable();
                 
                     window.setInterval(function () {
                         fillTable();
                     }, 1000);
                 } else {
-                    elInfoBox.innerHTML = 'Error al conectar';
+                    haveError = true;
                     fillTable();
                 }
             } catch (error) {
-                elInfoBox.innerHTML = 'Error al conectar';
-                    fillTable();
+                haveError = true;
+                fillTable();
             }
         };
     });
@@ -110,6 +110,8 @@ function fillTable() {
             }
 
             elInfoBox.innerHTML = 'En pausa: ' + hoursPause;
+        } else if (haveError) {
+            elInfoBox.innerHTML = 'Error al conectar';
         } else {
             elInfoBox.innerHTML = 'En pausa';
         }
@@ -144,7 +146,7 @@ function fillTable() {
 
     let msInOffice = 0; // Milisegundos totales desde el la primera entrada y la ultima salida o hora actual
     let msInBreak = 0; // Milisegundos totales de descanso
-    let msTotalPrevisionInBreak = 0; // Milisegundos totales de descanso o los previstos si es mayor
+    let msTotalPrevisionInBreak = 0; // Milisegundos totales a sumar de descanso o los previstos si es mayor
 
     if(ins.length > outs.length) {
         msInOffice = Date.now() - ins[0];
@@ -155,23 +157,25 @@ function fillTable() {
 
     for (let i = 0; i < outs.length; i++) {
         msInBreak += ((ins[i+1]) ? (ins[i+1]) : Date.now()) - outs[i];
-        msTotalPrevisionInBreak = msInBreak;
     }
 
     if(isSpecialDay && configuration.minBreakSpecialEnable && isValidNumber(configuration.minBreakSpecial) && Number(configuration.minBreakSpecial) > msInBreak) {
-        msTotalPrevisionInBreak = Number(configuration.minBreakSpecial);
+        msTotalPrevisionInBreak = Number(configuration.minBreakSpecial) - msInBreak;
     }
 
     if(!isSpecialDay && configuration.minBreakOrdinaryEnable && isValidNumber(configuration.minBreakOrdinary) && Number(configuration.minBreakOrdinary) > msInBreak) {
-        msTotalPrevisionInBreak = Number(configuration.minBreakOrdinary);
+        msTotalPrevisionInBreak = Number(configuration.minBreakOrdinary) - msInBreak;
     }
 
     let msWorked = (msInOffice - msInBreak); // Milisegundos del tiempo trabajado
 
     if (
-        isSpecialDay || 
-        ins.length > 1 || 
-        (configuration.minBreakOrdinaryEnable && isValidNumber(configuration.minBreakOrdinary))
+        !haveError && 
+        (
+            isSpecialDay || 
+            ins.length > 1 || 
+            (configuration.minBreakOrdinaryEnable && isValidNumber(configuration.minBreakOrdinary))
+        )
     ) {
         elOutRow.style.display = 'table-row';
     }
