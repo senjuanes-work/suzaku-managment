@@ -118,7 +118,7 @@ function fillTable() {
     // DEBUG:
     // ins = [];
     // outs = [];
-    // ins.push(fakeDate('8:22'));
+    // ins.push(fakeDate("7:40"));
     // outs.push(fakeDate('13:32'));
     // ins.push(fakeDate('14:05'));
     // outs.push(fakeDate('17:32'));
@@ -223,16 +223,18 @@ function fillTable() {
   if (configuration.precisionMode) {
     elWorkedHours.innerHTML = round2(msWorked / 1000 / 60 / 60, 4);
     elHoursToWork.innerHTML = round2(msRemainingWork / 1000 / 60 / 60, 4);
-    elPercentaje.innerHTML = round2((msWorked / msTotalWorkToday) * 100, 4);
+    elPercentaje.innerHTML = round2(
+      (msWorked / (msTotalWorkToday + msExtraMinIn)) * 100,
+      4
+    );
     elOutTime.innerHTML = new Date(msEndTime).toLocaleTimeString();
   } else {
     elWorkedHours.innerHTML = toHumanReadable(msWorked);
     elHoursToWork.innerHTML = toHumanReadable(msRemainingWork);
     elPercentaje.innerHTML =
-      Number(round2((msWorked / msTotalWorkToday) * 100)).toLocaleString(
-        undefined,
-        { minimumFractionDigits: 2 }
-      ) + "%";
+      Number(
+        round2((msWorked / (msTotalWorkToday + msExtraMinIn)) * 100)
+      ).toLocaleString(undefined, { minimumFractionDigits: 2 }) + "%";
     elOutTime.innerHTML = new Date(msEndTime).toLocaleTimeString(undefined, {
       hour: "2-digit",
       minute: "2-digit",
@@ -272,20 +274,20 @@ function isValidNumber(item) {
 
 function now() {
   // DEBUG:
-  // return fakeDate('17:35');
+  // return fakeDate("15:00");
   return Date.now();
 }
 
 function dateNow() {
-  return new Date(Date.now());
+  return new Date(now());
 }
 
 // DEBUG:
-// function fakeDate(time){
-//     let fake = dateNow();
-//     fake.setHours(time.split(':')[0]);
-//     fake.setMinutes(time.split(':')[1]);
-//     fake.setSeconds(0);
-//     fake.setMilliseconds(0);
-//     return fake.getTime();
+// function fakeDate(time) {
+//   let fake = new Date();
+//   fake.setHours(time.split(":")[0]);
+//   fake.setMinutes(time.split(":")[1]);
+//   fake.setSeconds(0);
+//   fake.setMilliseconds(0);
+//   return fake.getTime();
 // }
