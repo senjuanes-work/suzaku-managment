@@ -32,7 +32,7 @@ let responseData;
 
 load();
 
-function load() {
+function load(useAlternativeUrl = false) {
   chrome.storage.sync.get(
     [
       "precisionMode",
@@ -73,7 +73,9 @@ function load() {
       var xhr = new XMLHttpRequest();
       xhr.open(
         "POST",
-        "https://nervia.suzaku.es/Hr/Attendance/List_Read",
+        useAlternativeUrl
+          ? "https://suzaku.nerviaconsultores.com/Hr/Attendance/List_Read"
+          : "https://nervia.suzaku.es/Hr/Attendance/List_Read",
         true
       );
       xhr.send(formData);
@@ -83,6 +85,7 @@ function load() {
           if (this.readyState != 4) return;
 
           if (this.status == 200) {
+            haveError = false;
             responseData = JSON.parse(this.responseText);
             fillTable();
 
@@ -91,11 +94,38 @@ function load() {
             }, 1000);
           } else {
             haveError = true;
-            fillTable();
+            console.error(
+              "URL",
+              useAlternativeUrl
+                ? "https://suzaku.nerviaconsultores.com/Hr/Attendance/List_Read"
+                : "https://nervia.suzaku.es/Hr/Attendance/List_Read"
+            );
+            console.error("Status response", this.status);
+
+            if (useAlternativeUrl) {
+              fillTable();
+            } else {
+              console.log("Test alternative URL");
+              load(true);
+            }
           }
         } catch (error) {
           haveError = true;
-          fillTable();
+          console.error("Error on GET");
+          console.error(
+            "URL",
+            useAlternativeUrl
+              ? "https://suzaku.nerviaconsultores.com/Hr/Attendance/List_Read"
+              : "https://nervia.suzaku.es/Hr/Attendance/List_Read"
+          );
+          console.error(error);
+
+          if (useAlternativeUrl) {
+            fillTable();
+          } else {
+            console.log("Test alternative URL");
+            load(true);
+          }
         }
       };
     }
