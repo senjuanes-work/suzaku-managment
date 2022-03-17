@@ -141,16 +141,25 @@ function fillTable() {
     responseData.data.Items.forEach((item) => {
       if (item.AttendanceType === "In")
         ins.push(new Date(item.UserDate).getTime());
-      if (item.AttendanceType === "Out")
-        outs.push(new Date(item.UserDate).getTime());
     });
+
+    if (ins.length > 0) {
+      ins.sort();
+
+      responseData.data.Items.forEach((item) => {
+        let timestampOut = new Date(item.UserDate).getTime();
+        // Descartamos las salidas anteriores a la primera entrada (Porque no tiene sentido 😂)
+        if (item.AttendanceType === "Out" && timestampOut > ins[0])
+          outs.push(timestampOut);
+      });
+    }
 
     // DEBUG:
     // ins = [];
     // outs = [];
     // ins.push(fakeDate("7:40"));
-    // outs.push(fakeDate('13:32'));
-    // ins.push(fakeDate('14:05'));
+    // outs.push(fakeDate("03:32"));
+    // ins.push(fakeDate("08:05"));
     // outs.push(fakeDate('17:32'));
   }
 
